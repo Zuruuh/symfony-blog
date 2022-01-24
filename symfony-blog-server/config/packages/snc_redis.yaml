@@ -1,0 +1,6 @@
+snc_redis:
+  clients:
+    session:
+      type: predis
+      alias: session
+      dsn: "%env(REDIS_SESSION_URL)%"
