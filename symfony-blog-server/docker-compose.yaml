@@ -1,0 +1,56 @@
+version: "3.7"
+
+services:
+  primary-database:
+    image: postgres:${POSTGRES_VERSION:-13}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-symfony}
+      POSTGRES_USER: ${POSTGRES_USER:-symfony}
+    volumes:
+      - database:/var/lib/postgresql:rw
+    expose:
+      - 5432
+
+  nginx:
+    image: nginx:${NGINX_VERSION:-1.21.5}-alpine
+    depends_on:
+      - php-fpm
+    volumes:
+      - ./docker/nginx/vhost.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./public/:/srv/public/:ro
+    ports:
+      - "8000:80"
+
+  php-fpm:
+    build:
+      context: ./docker/php
+      args:
+        VERSION: ${PHP_VERSION:-8.0}
+    working_dir: /srv
+    depends_on:
+      - primary-database
+    volumes:
+      - ./:/srv/:rw
+      - ./docker/php/config/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./docker/php/config/symfony.ini:/usr/local/etc/php/conf.d/symfony.ini:ro
+    environment:
+      - PHP_FPM_CLEAR_ENV=no
+    expose:
+      - 9000
+
+  redis-session:
+    image: redis:${REDIS_VERSION:-6.2.6}-alpine
+    volumes:
+      - ./var/redis/:/data:rw
+      - ./docker/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    expose:
+      - 6379
+
+networks:
+  default:
+    name: local
+    driver: bridge
+
+volumes:
+  database: ~
