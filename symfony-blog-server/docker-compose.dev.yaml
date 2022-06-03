@@ -1,0 +1,65 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres:${POSTGRES_VERSION:-13}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-symfony}
+      POSTGRES_USER: ${POSTGRES_USER:-symfony}
+    ports:
+    - "5432:5432"
+
+  nginx:
+    image: nginx:${NGINX_VERSION:-1.21.5}-alpine
+    depends_on:
+      - php-fpm
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./public/:/srv/public/:ro
+    ports:
+      - "8000:80"
+
+  php-fpm:
+    build:
+      context: ./docker/php
+      args:
+        VERSION: ${PHP_VERSION:-8.1.6}
+    working_dir: /srv
+    user: 1000:1000
+    depends_on:
+      - database
+      - cache
+      - mailer
+      - rabbitmq
+    volumes:
+      - ./:/srv/:rw
+      - ./docker/php/config/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./docker/php/config/symfony.ini:/usr/local/etc/php/conf.d/symfony.ini:ro
+      - ./docker/php/config/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+    environment:
+      - PHP_FPM_CLEAR_ENV=no
+      - APP_ENV=dev
+    expose: [9000]
+
+  cache:
+    image: eqalpha/keydb:${KEYDB_VERSION:-alpine_x86_64_v6.3.1}
+    # redis:${REDIS_VERSION:-6.2.6}-alpine
+    volumes:
+      - ./docker/keydb.conf:/etc/keydb/keydb.conf:ro
+    expose: [6379]
+
+  rabbitmq:
+    image: rabbitmq:${RABBITMQ_VERSION:-3.9.20-management-alpine}
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-admin}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-password}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  mailer:
+    image: schickling/mailcatcher
+    ports:
+      - "1025:1025"
+      - "1080:1080"

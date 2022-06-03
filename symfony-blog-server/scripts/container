@@ -1,0 +1,9 @@
+#!/bin/bash
+
+## Usage:
+## ./scripts/container.sh
+## <service name ('database' for example')>
+## <command ('sh')>
+container_id=$(docker-compose -f docker-compose.dev.yaml ps -q $1)
+#docker exec -it "$container_id" "${@:2}"
+docker exec -it "$container_id" sh

@@ -1,0 +1,23 @@
+common:
+  not_blank: This value should not be blank
+  unauthorized: You are not allowed to do this
+
+user:
+  username:
+    already_taken: This username is already taken
+    too_short: Your username must be at least {{ limit }} characters long
+    too_long: Your username cannot be longer than {{ limit }} characters
+    invalid: Your username must only contain alpha-numerical characters and hyphens ("-" and "_")
+  email:
+    already_in_use: This email address is already in use
+    invalid: This email address is not valid
+  password:
+    too_short: Your password must be at least {{ limit }} characters long
+    too_long: Your password cannot be longer than {{ limit }} characters
+
+post:
+  title:
+    too_long: Your article's title cannot be longer than {{ limit }} characters long
+    slug_already_in_use: An article with a similar title was already created before
+  content:
+    too_long: Your article is way too large! Consider splitting it into multiple differents articles

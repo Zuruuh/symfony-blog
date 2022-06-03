@@ -1,0 +1,5 @@
+auth:
+  invalid_credentials: Invalid credentials.
+
+user:
+  identifier_not_found: Aucun utilisateur n'existe avec cet identifiant

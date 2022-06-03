@@ -1,0 +1,18 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+    App\EventListener\TimestampableListener:
+      tags:
+        - name: 'doctrine.event_listener'
+          event: 'onFlush'
+          priority: 500
+          connection: 'default'

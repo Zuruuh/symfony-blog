@@ -1,0 +1,59 @@
+<?php
+
+use App\Entity\User;
+use App\Common\Constant\UserRoles;
+use App\Security\Authenticator\TokenAuthenticator;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Config\SecurityConfig;
+
+
+return static function (SecurityConfig $security)
+{
+    $USER_PROVIDER = 'app_user_provider';
+
+    $security->enableAuthenticatorManager(true);
+    $security
+        ->passwordHasher(PasswordAuthenticatedUserInterface::class)
+            ->algorithm('auto')
+        ;
+
+    $security
+        ->provider($USER_PROVIDER)
+        ->entity()
+            ->class(User::class)
+            ->property('email')
+    ;
+
+    $security
+        ->firewall('dev')
+            ->pattern('^/(_(profiler|wdt)|css|images|resources|js|scripts)/')
+            ->security(false)
+    ;
+
+    $security
+        ->firewall('auth')
+            ->pattern('^/auth/(register|login)$')
+            ->lazy(true)
+            ->security(false)
+            ->stateless(true)
+            ->provider($USER_PROVIDER)
+            ->loginThrottling()
+            ->maxAttempts(5)
+            ->interval('10 minutes')
+    ;
+
+    $security
+        ->firewall('main')
+            ->pattern('^/')
+            ->lazy(true)
+            ->stateless(true)
+            ->provider($USER_PROVIDER)
+            ->customAuthenticators([
+                TokenAuthenticator::class
+            ])
+    ;
+
+    $roles = array_filter(UserRoles::ROLES, fn (string $role) => $role !== UserRoles::SUPER_ADMIN_ROLE);
+    $security->roleHierarchy(UserRoles::SUPER_ADMIN_ROLE, $roles);
+    $security->roleHierarchy(User::ADMIN_ROLE, [User::USER_ROLE]);
+};

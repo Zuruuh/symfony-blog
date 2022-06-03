@@ -1,0 +1,23 @@
+common:
+  not_blank: Cette valeur ne devrait pas être vide
+  unauthorized: Vous n'êtes pas autorisé à effectuer cette action
+
+user:
+  username:
+    already_taken: Ce nom d'utilisateur a déjà été pris
+    too_long: Votre nom d'utilisateur ne doit pas faire plus de {{ limit }} charactères
+    too_short: Votre nom d'utilisateur doit faire au moins {{ limit }} charactères
+    invalid: Votre nom d'utilisateur doit contenir uniquement des charactères alpha-numériques et des tirets ("-" et "_")
+  email:
+    already_in_use: Cette addresse mail est déjà utilisée
+    invalid: Votre addresse mail est invalide
+  password:
+    too_short: Votre mot de passe doit faire au moins {{ limit }} charactères
+    too_long: Votre mot de passe ne peut pas faire plus de {{ limit }} charactères
+
+post:
+  title:
+    too_long: Votre titre ne doit pas faire plus de {{ limit }} charactères
+    slug_already_in_use: Un article avec un titre similaire à déjà été crée auparavant
+  content:
+    too_long: Votre article est beaucoup trop grand ! Pensez à séparer votre contenu en plusieurs articles différents
