@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Normalizers\User;
+namespace App\Normalizer\User;
 
-use App\Common\AbstractNormalizer;
+use App\Common\Normalizer\AbstractNormalizer;
 use App\Entity\User;
 
 class SelfNormalizer extends AbstractNormalizer

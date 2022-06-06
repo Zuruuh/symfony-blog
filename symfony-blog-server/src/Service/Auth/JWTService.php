@@ -23,9 +23,9 @@ class JWTService
      * @throws MissingJWTKeyPairException
      */
     public function __construct(
-        private RequestStack $requestStack,
-        private UserRepository $userRepository,
-        private Environment $environment
+        private readonly RequestStack   $requestStack,
+        private readonly UserRepository $userRepository,
+        private readonly Environment    $environment
     ) {
         $privateKeyPath = $this->environment->path('%s/config/jwt/private.pem');
         $publicKeyPath = $this->environment->path('%s/config/jwt/public.pem');
@@ -44,10 +44,10 @@ class JWTService
             // Registered claims
             'iss' => $this->requestStack->getCurrentRequest()->getHost(),
             'iat' => (new \DateTime('now'))->getTimestamp(),
-            'exp' => $this->environment->getEnv() === 'prod' ? (new \DateTime('+1 hour'))->getTimestamp() : (new \DateTime('+9999 days'))->getTimestamp(),
+            'exp' => $this->environment->isEnv('prod') ? (new \DateTime('+1 hour'))->getTimestamp() : (new \DateTime('+9999 days'))->getTimestamp(),
             // Private claims
             'user' => $user->getUserIdentifier(),
-            // 'roles' => $user->getRoles(),
+            'salt' => $user->getJwtSalt(), // @phpstan-ignore-line
         ], $this->privateKey, self::KEY_ALGORITHM);
     }
 

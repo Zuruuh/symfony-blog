@@ -15,7 +15,7 @@ class TimestampableListener
         $uow = $event->getEntityManager()->getUnitOfWork();
         $entities = [...$uow->getScheduledEntityUpdates(), $uow->getScheduledEntityInsertions()];
 
-        foreach (array_unique($entities) as $entity) {
+        foreach ($entities as $entity) {
             if ($entity instanceof TimestampedInterface) {
                 $this->refreshLastUpdate($uow, $entity);
             }

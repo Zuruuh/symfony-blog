@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Normalizers\Post;
+namespace App\Normalizer\Post;
 
-use App\Common\AbstractNormalizer;
+use App\Common\Normalizer\AbstractNormalizer;
 use App\Entity\User;
 
 class AuthorNormalizer extends AbstractNormalizer

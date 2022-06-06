@@ -30,6 +30,7 @@ services:
     depends_on:
       - database
       - cache
+      - store
       - mailer
       - rabbitmq
     volumes:
@@ -44,7 +45,12 @@ services:
 
   cache:
     image: eqalpha/keydb:${KEYDB_VERSION:-alpine_x86_64_v6.3.1}
-    # redis:${REDIS_VERSION:-6.2.6}-alpine
+    volumes:
+      - ./docker/keydb.conf:/etc/keydb/keydb.conf:ro
+    expose: [6379]
+
+  store:
+    image: eqalpha/keydb:${KEYDB_VERSION:-alpine_x86_64_v6.3.1}
     volumes:
       - ./docker/keydb.conf:/etc/keydb/keydb.conf:ro
     expose: [6379]
@@ -57,6 +63,8 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+#  elastic
 
   mailer:
     image: schickling/mailcatcher

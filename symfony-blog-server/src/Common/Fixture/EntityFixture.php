@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Common;
+namespace App\Common\Fixture;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;

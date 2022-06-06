@@ -8,14 +8,15 @@
 ##
 ##
 
-DOCKER_COMPOSE  = docker-compose -f docker-compose.dev.yaml
+DOCKER_COMPOSE = docker-compose -f docker-compose.dev.yaml
 
-EXEC_PHP        = $(DOCKER_COMPOSE) exec php-fpm
-REDIS           = $(DOCKER_COMPOSE) exec cache
+EXEC_PHP       = $(DOCKER_COMPOSE) exec php-fpm
+CACHE          = $(DOCKER_COMPOSE) exec cache
+STORE		   = $(DOCKER_COMPOSE) exec store
 
-SYMFONY         = $(EXEC_PHP) bin/console
-PHPUNIT			= $(EXEC_PHP) bin/phpunit --coverage-html coverage -v -c ./phpunit.xml.dist
-COMPOSER        = $(EXEC_PHP) composer
+SYMFONY        = $(EXEC_PHP) bin/console
+PHPUNIT		   = $(EXEC_PHP) bin/phpunit --coverage-html coverage -v -c ./phpunit.xml.dist
+COMPOSER       = $(EXEC_PHP) composer
 
 pull:
 	$(DOCKER_COMPOSE) pull --parallel --quiet --ignore-pull-failures 2> /dev/null
@@ -88,7 +89,8 @@ db-validate-schema: ## Validate the database schema
 	$(SYMFONY) doctrine:schema:validate
 
 redis-flush:
-	$(REDIS) flushall
+	$(CACHE) keydb-cli flushall
+	$(STORE) keydb-cli flushall
 
 .PHONY: db migration migrate db-update-schema db-validate-schema redis-flush
 

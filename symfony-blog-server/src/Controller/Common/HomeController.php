@@ -2,8 +2,8 @@
 
 namespace App\Controller\Common;
 
-use App\Common\AbstractController;
-use App\Normalizers\User\SelfNormalizer;
+use App\Common\Http\AbstractController;
+use App\Normalizer\User\SelfNormalizer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

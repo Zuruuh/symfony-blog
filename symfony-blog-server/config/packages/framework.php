@@ -1,5 +1,6 @@
 <?php
 
+use App\Controller\Common\ExceptionController;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use Symfony\Config\FrameworkConfig;
@@ -17,6 +18,7 @@ return static function (FrameworkConfig $framework, ContainerConfigurator $conta
     ;
 
     $framework
+        ->errorController(ExceptionController::class . '::show')
         ->phpErrors()
             ->log(true)
     ;

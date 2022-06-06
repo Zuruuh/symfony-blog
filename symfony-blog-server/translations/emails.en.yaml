@@ -1,0 +1,5 @@
+security:
+  verify_account:
+    title: Account activation
+    welcome: Hello %user%!
+    click_here: Please click on <a href="%link%">this link</a> to activate your account

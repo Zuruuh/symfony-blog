@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Common;
+namespace App\Common\Security;
 
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -14,7 +14,7 @@ use function Symfony\Component\String\u;
  */
 abstract class AbstractVoter extends Voter
 {
-    protected abstract static function getAttributes(): array;
+    abstract protected static function getAttributes(): array;
 
     public function __construct(
         protected Security $security
@@ -23,17 +23,16 @@ abstract class AbstractVoter extends Voter
     /**
      * @param T $subject
      */
-    protected abstract function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool;
+    abstract protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool;
 
     /**
      * @param T $object
      */
     protected function callVoter(string $attribute, mixed $object, User $user): bool
     {
-        $method = u($attribute)
-            ->lower()
-            ->camel()
+        $method = u(ucfirst($attribute))
             ->prepend('can')
+            ->camel()
             ->toString();
 
         return $this->$method($object, $user);

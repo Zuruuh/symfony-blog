@@ -2,60 +2,55 @@
 
 namespace App\Controller\Blog;
 
-use App\Common\AbstractController;
+use App\Common\Http\AbstractController;
 use App\Entity\Post;
-use App\Entity\User;
 use App\Form\Post\PostType;
-use App\Normalizers\Post\ShowPostNormalizer;
+use App\Manager\PostManager;
+use App\Normalizer\Post\ShowPostNormalizer;
+use App\Repository\PostRepository;
 use App\Voter\PostVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/blog')]
 class BlogController extends AbstractController
 {
     #[Route(methods: ['GET'])]
-    public function list(): Response
+    public function list(PostRepository $postRepository): Response
     {
+        /*
         dump($this->getRequestOptions());
         dump($this->getPagingOptions());
         dump($this->getSortingOptions());
         dump($this->getFilterOptions());
+        */
 
-        return $this->void();
+        return $this->serializeToJson(ShowPostNormalizer::class, $postRepository->findAll(), ['show_author' => false]);
     }
 
     #[Route('/{post}', methods: ['GET'])]
     #[ParamConverter('post', class: Post::class, options: ['mapping' => ['post' => 'slug']])]
     public function view(Post $post): Response
     {
-        $data = $this->serialize(ShowPostNormalizer::class, $post);
-
-        return $this->json($data);
+        return $this->serializeToJson(ShowPostNormalizer::class, $post);
     }
 
     #[Route(methods: ['POST'])]
-    public function create(Request $request): Response
+    public function create(PostManager $postManager): Response
     {
-        $form = $this->createForm(PostType::class)->submit($request->request->all());
+        $form = $this->createAndSubmitForm(PostType::class);
 
         if (!$form->isValid()) {
             return $this->displayForm($form);
         }
 
         $post = $form->getData();
-        $post->updateSlug();
-        $post->setAuthor($this->getUser());
+        $postManager->forPost($post)->save();
 
-        $this->em->persist($post);
         $this->em->flush();
 
-        $data = $this->serialize(ShowPostNormalizer::class, $post);
-
-        return $this->json($data);
+        return $this->serializeToJson(ShowPostNormalizer::class, $post);
     }
 
     #[Route('/{post}', methods: ['DELETE'])]
@@ -72,22 +67,18 @@ class BlogController extends AbstractController
 
     #[Route('/{post}', methods: ['PUT'])]
     #[ParamConverter('post', class: Post::class, options: ['mapping' => ['post' => 'slug']])]
-    public function update(Post $post, Request $request): Response
+    public function update(Post $post, PostManager $postManager): Response
     {
         $this->denyAccessUnlessGranted(PostVoter::EDIT_ACTION, $post);
-        $form = $this
-            ->createForm(PostType::class, $post, ['post' => $post])
-            ->submit($request->request->all());
+        $form = $this->createAndSubmitForm(PostType::class, $post, ['post' => $post]);
 
         if (!$form->isValid()) {
             $this->displayForm($form);
         }
 
-        $post->updateSlug();
+        $postManager->forPost($post)->update();
         $this->em->flush();
 
-        $data = $this->serialize(ShowPostNormalizer::class, $post, ['show_author' => false]);
-
-        return $this->json($data);
+        return $this->serializeToJson(ShowPostNormalizer::class, $post, ['show_author' => false]);
     }
 }

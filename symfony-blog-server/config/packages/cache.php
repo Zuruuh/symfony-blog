@@ -11,6 +11,6 @@ return static function (FrameworkConfig $framework) {
 
     $framework
         ->cache()
-            ->defaultRedisProvider(env('REDIS_URL'))
+            ->defaultRedisProvider(env('REDIS_CACHE_URL'))
     ;
 };

@@ -37,7 +37,7 @@ trait TimestampedTrait
         return $this;
     }
 
-    private function generateTimestamps(): void
+    public function generateTimestamps(): void
     {
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());

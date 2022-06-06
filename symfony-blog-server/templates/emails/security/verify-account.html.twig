@@ -1,0 +1,22 @@
+{% extends 'emails/base-mail.html.twig' %}
+{% block locale %}{{ locale }}{% endblock %}
+{% set tkey = 'security.verify_account.' %}
+
+{% block body %}
+    <p>
+        {{ t(
+            tkey ~ 'welcome',
+            { '%user%': username},
+            'emails',
+            locale
+        ) | trans }}
+    </p>
+    <p>
+        {{ t(
+            tkey ~ 'click_here',
+            { '%link%': link },
+            'emails',
+            locale
+        ) | trans | raw }}
+    </p>
+{% endblock %}

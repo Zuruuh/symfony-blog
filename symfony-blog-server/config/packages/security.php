@@ -3,22 +3,30 @@
 use App\Entity\User;
 use App\Common\Constant\UserRoles;
 use App\Security\Authenticator\TokenAuthenticator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Config\SecurityConfig;
 
 
-return static function (SecurityConfig $security)
+const USER_PROVIDER = 'app_user_provider';
+return static function (SecurityConfig $security, ContainerConfigurator $container)
 {
-    $USER_PROVIDER = 'app_user_provider';
 
     $security->enableAuthenticatorManager(true);
-    $security
-        ->passwordHasher(PasswordAuthenticatedUserInterface::class)
-            ->algorithm('auto')
+    if ($container->env() === 'prod') {
+        $security
+            ->passwordHasher(PasswordAuthenticatedUserInterface::class)
+                ->algorithm('argon2')
         ;
+    } else {
+        $security
+            ->passwordHasher(PasswordAuthenticatedUserInterface::class)
+                ->algorithm('md5')
+        ;
+    }
 
     $security
-        ->provider($USER_PROVIDER)
+        ->provider(USER_PROVIDER)
         ->entity()
             ->class(User::class)
             ->property('email')
@@ -36,7 +44,7 @@ return static function (SecurityConfig $security)
             ->lazy(true)
             ->security(false)
             ->stateless(true)
-            ->provider($USER_PROVIDER)
+            ->provider(USER_PROVIDER)
             ->loginThrottling()
             ->maxAttempts(5)
             ->interval('10 minutes')
@@ -47,7 +55,7 @@ return static function (SecurityConfig $security)
             ->pattern('^/')
             ->lazy(true)
             ->stateless(true)
-            ->provider($USER_PROVIDER)
+            ->provider(USER_PROVIDER)
             ->customAuthenticators([
                 TokenAuthenticator::class
             ])

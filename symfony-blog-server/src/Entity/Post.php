@@ -22,7 +22,7 @@ class Post implements TimestampedInterface, MatchableEntityInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private int $id; /** @phpstan-ignore-line */
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: true)]
@@ -41,14 +41,7 @@ class Post implements TimestampedInterface, MatchableEntityInterface
     #[Assert\NotBlank(message: 'common.not_blank')]
     private string $content;
 
-    public function __construct()
-    {
-        $this->generateTimestamps();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public static function getMatching(): array
     {
         return [
@@ -61,9 +54,7 @@ class Post implements TimestampedInterface, MatchableEntityInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public static function getMatchingMeta(): array
     {
         return [

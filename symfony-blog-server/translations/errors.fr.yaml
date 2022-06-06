@@ -1,5 +1,7 @@
 auth:
   invalid_credentials: Identifiants invalides.
+  expired_credentials: Identifiants expirés
+  invalid_verify_account_token: Jeton invalide
 
 user:
   identifier_not_found: Aucun utilisateur n'existe avec cet identifiant

@@ -1,9 +1,9 @@
 parameters:
   symfony:
-    containerXmlPath: var/cache/dev/srcApp_KernelDevDebugContainer.xml
+    containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
   scanDirectories:
     - var/cache/dev/Symfony/Config
-  level: 9
+  level: 5
   paths:
     - src
     - tests

@@ -16,3 +16,6 @@
 /config/jwt/*
 !/config/jwt/.gitkeep
 ###< firebase/php-jwt ###
+
+/.idea
+/.vscode

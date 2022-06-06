@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private int $id; // @phpstan-ignore-line
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\Email(message: 'user.email.invalid')]
@@ -41,11 +41,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: self::USERNAME_MAX_LENGTH, unique: true)]
     #[Assert\Length(min: self::USERNAME_MIN_LENGTH, max: self::USERNAME_MAX_LENGTH, minMessage: 'user.username.too_short', maxMessage: 'user.username.too_long')]
-    #[Assert\Regex(pattern: '/^[a-zA-Z\-_]+$/')]
+    #[Assert\Regex(pattern: '/^[0-9a-zA-Z\-_]+$/')]
     #[Assert\NotBlank(message: 'common.not_blank')]
     #[Assert\Type('string')]
     private string $username;
 
+    /** @var string[] */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
@@ -54,6 +55,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Type('string')]
     private string $password;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $activated = false;
+
+    #[ORM\Column(type: 'string', length: 16)]
+    private string $jwtSalt = '';
+
+    /** @var Collection<int, Post> */
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class)]
     private Collection $posts;
 
@@ -94,6 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique([...$this->roles, self::USER_ROLE]);
     }
 
+    /** @param string[] $roles */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -101,9 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @param string|string[] $roles
-     */
+    /** @param string|string[] $roles */
     public function hasRoles(array|string $roles): bool
     {
         $roles = is_array($roles) ? $roles : [$roles];
@@ -117,9 +124,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return true;
     }
 
-    /**
-     * @param string|string[] $roles
-     */
+    /** @param string|string[] $roles */
     public function addRoles(string|array $roles): self
     {
         $roles = is_array($roles) ? $roles : [$roles];
@@ -145,7 +150,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return null;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -181,6 +186,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->posts->removeElement($post) && $post->getAuthor() === $this) {
             $post->setAuthor(null);
         }
+
+        return $this;
+    }
+
+    public function getActivated(): bool
+    {
+        return $this->activated;
+    }
+
+    public function setActivated(bool $activated): self
+    {
+        $this->activated = $activated;
+
+        return $this;
+    }
+
+    public function getJwtSalt(): string
+    {
+        return $this->jwtSalt;
+    }
+
+    public function setJwtSalt(string $salt): self
+    {
+        $this->jwtSalt = $salt;
 
         return $this;
     }

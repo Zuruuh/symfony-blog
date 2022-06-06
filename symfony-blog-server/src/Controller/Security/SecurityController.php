@@ -2,14 +2,17 @@
 
 namespace App\Controller\Security;
 
+use App\Common\Http\AbstractController;
 use App\Entity\User;
 use App\Form\Security\LoginAsType;
 use App\Form\Security\LoginType;
 use App\Form\User\UserType;
-use App\Normalizers\User\SelfNormalizer;
+use App\Manager\UserManager;
+use App\Normalizer\User\SelfNormalizer;
 use App\Repository\UserRepository;
-use App\Common\AbstractController;
 use App\Service\Auth\JWTService;
+use App\Service\Auth\UserAuthService;
+use App\Voter\UserVoter;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface as Hasher;
@@ -21,25 +24,22 @@ class SecurityController extends AbstractController
     #[Route('', methods: ['GET'])]
     public function me(): Response
     {
-        $data = $this->serialize(SelfNormalizer::class, $this->getUser());
-
-        return $this->json($data);
+        return $this->serializeToJson(SelfNormalizer::class, $this->getUser());
     }
 
     #[Route('/login', methods: ['POST'])]
     public function login(UserRepository $userRepository, Hasher $hasher, JWTService $JWTService): Response
     {
-        $form = $this
-            ->createForm(LoginType::class)
-            ->submit($this
-                ->getRequest()
-                ->request
-                ->all());
+        $form = $this->createAndSubmitForm(LoginType::class);
 
         if (!$form->isValid()) {
             return $this->displayForm($form);
         }
 
+        /**
+         * @var string $identifier
+         * @var string $password
+         */
         list('usernameOrEmail' => $identifier, 'password' => $password) = $form->getData();
 
         $user = $userRepository->findByUniqueIdentifier($identifier);
@@ -57,45 +57,45 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/register', methods: ['POST'])]
-    public function register(JWTService $JWTService, Hasher $hasher): Response
+    public function register(JWTService $JWTService, UserManager $userManager): Response
     {
-        $form = $this
-            ->createForm(UserType::class)
-            ->submit($this
-                ->getRequest()
-                ->request
-                ->all());
+        $form = $this->createAndSubmitForm(UserType::class);
 
         if (!$form->isValid()) {
             return $this->displayForm($form);
         }
+
         $user = $form->getData();
+        $userManager = $userManager->forUser($user);
 
-        $password = $user->getPassword();
-        $password = $hasher->hashPassword($user, $password);
-        $user->setPassword($password);
-
-        $this->em->persist($user);
+        $userManager->save();
         $this->em->flush();
 
+        $userManager->sendVerificationEmail();
         $token = $JWTService->generate($user);
 
         return $this->json(['token' => $token]);
     }
 
+    #[Route('/verify-account/{token}', methods: ['GET'])]
+    public function verifyAccount(string $token, UserAuthService $authService): Response
+    {
+        $validated = $authService->verifyToken($token);
+        if (!$validated) {
+            throw $this->exception(404, $this->t('auth.invalid_verify_account_token', [], 'errors'));
+        }
+
+        $this->em->flush();
+
+        return $this->void();
+    }
+
     #[Route('/login-as', methods: ['POST'])]
     public function loginAs(UserRepository $userRepository, JWTService $JWTService): Response
     {
-        dump($this->getUser()->getRoles());
         $this->denyAccessUnlessGranted(User::SUPER_ADMIN_ROLE, $this->getUser());
 
-        $form = $this
-            ->createForm(LoginAsType::class)
-            ->submit($this
-                ->getRequest()
-                ->request
-                ->all()
-            );
+        $form = $this->createAndSubmitForm(LoginAsType::class);
 
         if (!$form->isValid()) {
             return $this->displayForm($form);

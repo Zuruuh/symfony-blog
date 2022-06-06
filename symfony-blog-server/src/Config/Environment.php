@@ -16,6 +16,11 @@ class Environment
         return $this->kernel->getEnvironment();
     }
 
+    public function getParameter(string $parameter): ?string
+    {
+        return (string) $this->kernel->getContainer()->getParameter($parameter);
+    }
+
     public function getRoot(): string
     {
         return $this->kernel->getProjectDir();
@@ -24,5 +29,10 @@ class Environment
     public function path(string $sprintf): string
     {
         return sprintf($sprintf, $this->getRoot());
+    }
+
+    public function isEnv(string $env): bool
+    {
+        return $this->getEnv() === $env;
     }
 }

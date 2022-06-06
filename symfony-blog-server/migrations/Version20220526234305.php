@@ -31,7 +31,6 @@ final class Version20220526234305 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP SEQUENCE post_id_seq CASCADE');
         $this->addSql('DROP TABLE post');
         $this->addSql('DROP INDEX UNIQ_8D93D649F85E0677');

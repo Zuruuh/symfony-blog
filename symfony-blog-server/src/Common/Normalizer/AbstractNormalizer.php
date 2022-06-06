@@ -1,16 +1,21 @@
 <?php
 
-namespace App\Common;
+namespace App\Common\Normalizer;
 
-use App\Normalizers\Exceptions\InvalidNormalizerProvidedException;
+use App\Normalizer\Exception\InvalidNormalizerProvidedException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 
+/**
+ * @template T
+ */
 abstract class AbstractNormalizer implements ContextAwareNormalizerInterface
 {
     public abstract static function getDefaultContext(): array;
 
     /**
+     * @param T $object
+     *
      * @throws InvalidNormalizerProvidedException
      * @throws ExceptionInterface
      */
@@ -21,11 +26,22 @@ abstract class AbstractNormalizer implements ContextAwareNormalizerInterface
             throw new InvalidNormalizerProvidedException($normalizer);
         }
 
+        if ($normalizer instanceof AbstractListNormalizer) {
+            $objects = is_array($object) ? $object : [$object];
+
+            return array_map(fn (mixed $data) => $normalizer->normalize($data, $format, $context), $objects);
+        }
+
         return $normalizer->normalize($object, $format, $context);
     }
 
     protected function getDefaults(array $context = []): array
     {
-        return array_merge($this::getDefaultContext(), $context);
+        $defaults = $this::getDefaultContext();
+        if ($this instanceof AbstractListNormalizer) {
+            $defaults = ['multiple' => true, ...$defaults];
+        }
+
+        return [...$defaults, ...$context];
     }
 }

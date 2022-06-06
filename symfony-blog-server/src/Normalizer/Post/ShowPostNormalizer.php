@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Normalizers\Post;
+namespace App\Normalizer\Post;
 
-use App\Common\AbstractNormalizer;
+use App\Common\Normalizer\AbstractListNormalizer;
 use App\Entity\Post;
 
-class ShowPostNormalizer extends AbstractNormalizer
+/**
+ * @extends AbstractListNormalizer<Post>
+ */
+class ShowPostNormalizer extends AbstractListNormalizer
 {
     public static function getDefaultContext(): array
     {
@@ -14,9 +17,6 @@ class ShowPostNormalizer extends AbstractNormalizer
         ];
     }
 
-    /**
-     * @param Post $object
-     */
     public function normalize($object, string $format = null, array $context = []): array
     {
         $context = $this->getDefaults($context);

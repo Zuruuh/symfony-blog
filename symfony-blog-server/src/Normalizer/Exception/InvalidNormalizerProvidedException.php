@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Normalizers\Exceptions;
+namespace App\Normalizer\Exception;
 
 use Exception;
 

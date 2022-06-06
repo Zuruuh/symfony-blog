@@ -1,0 +1,7 @@
+framework:
+  messenger:
+    reset_on_message: true
+    transports:
+      async: "%env(MESSENGER_TRANSPORT_DSN)%"
+    routing:
+      'App\Common\Message\AsyncMessageInterface': 'async'
