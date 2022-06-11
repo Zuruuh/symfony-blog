@@ -5,9 +5,9 @@
     "prefer-stable": true,
     "require": {
         "php": ">=8.1",
+        "ext-amqp": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-amqp": "*",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.6",
         "doctrine/doctrine-migrations-bundle": "^3.2",
@@ -43,7 +43,7 @@
         "symfony/twig-bundle": "5.4.*",
         "symfony/validator": "5.4.*",
         "symfony/yaml": "5.4.*",
-        "voku/arrayy": "^7.9",
+        "voku/arrayy": "^7.9"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
