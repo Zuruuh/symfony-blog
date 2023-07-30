@@ -1,0 +1,15 @@
+includes:
+  - ./vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+  tmpDir: .cache/phpstan
+  level: 9
+  paths:
+    - src/
+    - tests/
+  excludePaths:
+    - src/Infrastructure/Symfony/var/cache/dev
+  symfony:
+      containerXmlPath: src/Infrastructure/Symfony/var/cache/dev/Infrastructure_Symfony_KernelDevDebugContainer.xml
+  scanDirectories:
+    - src/Infrastructure/Symfony/var/cache/dev/Symfony/Config
