@@ -35,6 +35,8 @@ jobs:
         run: |
           composer install --prefer-dist --no-progress --no-scripts
           composer install --prefer-dist --no-progress --working-dir tools
+          mkdir .cache
+          mkdir .artifacts
 
       - name: 'Generate symfony cache 🎶'
         run: |
@@ -42,12 +44,20 @@ jobs:
 
       - name: 'Run phpstan ✅'
         run: |
+          tools/vendor/bin/phpstan analyse --configuration tools/phpstan.dist.neon --error-format > .artifacts/phpstan.out || exit 0
           tools/vendor/bin/phpstan analyse --configuration tools/phpstan.dist.neon
 
       - name: 'Run psalm ✅'
         run: |
-          tools/vendor/bin/psalm --config tools/psalm.dist.xml
+          tools/vendor/bin/psalm --config tools/psalm.dist.xml --output-format=github > .artifacts/psalm.out || exit 0
+          tools/vendor/bin/psalm --config tools/psalm.dist.xml --long-progress
 
       - name: 'Run deptrac ✅'
         run: |
-          tools/vendor/bin/deptrac --config tools/deptrac.yaml
+          tools/vendor/bin/deptrac --config-file tools/deptrac.yaml
+
+      - name: 'Upload artifacts 🚚'
+        uses: 'actions/upload-artifact@v3'
+        with:
+          name: static-analysis-report
+          path: ./.artifacts/*
