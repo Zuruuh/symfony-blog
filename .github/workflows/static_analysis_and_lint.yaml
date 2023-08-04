@@ -33,7 +33,7 @@ jobs:
 
       - name: 'Install dependencies 📦'
         run: |
-          composer install --prefer-dist --no-progress
+          composer install --prefer-dist --no-progress --no-scripts
           composer install --prefer-dist --no-progress --working-dir tools
 
       - name: 'Generate symfony cache 🎶'
