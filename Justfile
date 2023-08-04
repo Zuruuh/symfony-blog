@@ -31,4 +31,4 @@ phpstan: symfony_cache
 	{{phpstan_bin}} analyse --configuration ./phpstan.dist.neon
 
 deptrac: install
-    {{deptrac_bin}} analyse --config-file ./deptrac.yaml
+    {{deptrac_bin}} analyse --config-file ./deptrac.yaml --cache-file .cache/deptrac.cache
