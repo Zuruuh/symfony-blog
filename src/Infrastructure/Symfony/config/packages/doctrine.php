@@ -7,13 +7,10 @@ use Symfony\Config\DoctrineConfig;
 use Symfony\Config\Doctrine\DbalConfig;
 
 return static function (DoctrineConfig $doctrine, ContainerConfigurator $container): void {
-    $doctrine
-        ->dbal(
-            (new DbalConfig())
-                ->type('url', '%env(resolve:APP_DATABASE_URL)%')
-                ->type('server_version', '15')
-        )
-    ;
+    $dbal = $doctrine->dbal();
+
+    $dbal->type('url', '%env(resolve:APP_DATABASE_URL)%');
+    $dbal->type('server_version', '15');
     # orm:
     #     auto_generate_proxy_classes: true
     #     enable_lazy_ghost_objects: true

@@ -7,9 +7,7 @@ parameters:
   paths:
     - src/
     - tests/
-  excludePaths:
-    - src/Infrastructure/Symfony/var/cache/dev
   symfony:
-      containerXmlPath: src/Infrastructure/Symfony/var/cache/dev/Infrastructure_Symfony_KernelDevDebugContainer.xml
+      containerXmlPath: .cache/symfony/dev/Infrastructure_Symfony_KernelDevDebugContainer.xml
   scanDirectories:
-    - src/Infrastructure/Symfony/var/cache/dev/Symfony/Config
+    - .cache/symfony/dev/Symfony/Config

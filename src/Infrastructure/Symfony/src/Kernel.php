@@ -13,4 +13,9 @@ final class Kernel extends BaseKernel
     {
         return dirname(__DIR__);
     }
+
+    public function getCacheDir(): string
+    {
+        return dirname(__DIR__, 4) . "/.cache/symfony/{$this->environment}";
+    }
 }

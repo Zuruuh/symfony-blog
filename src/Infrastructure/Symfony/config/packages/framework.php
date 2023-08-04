@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Config\FrameworkConfig;
+use Symfony\Config\Framework\SessionConfig;
 
 return static function (FrameworkConfig $framework, ContainerConfigurator $container): void {
     $framework->secret('%env(APP_SECRET)%');
@@ -17,12 +18,14 @@ return static function (FrameworkConfig $framework, ContainerConfigurator $conta
         ->handleAllThrowables(false)
     ;
 
-    $framework
-        ->session()
-            ->handlerId(null)
-            ->cookieSecure('auto')
-            ->cookieSamesite('lax')
-            ->storageFactoryId('session.storage.factory.native')
+    $session = $framework->session();
+    assert($session instanceof SessionConfig);
+
+    $session
+        ->storageFactoryId('session.storage.factory.native')
+        ->handlerId(null)
+        ->cookieSecure('auto')
+        ->cookieSamesite('lax')
     ;
 
     $framework
@@ -31,10 +34,7 @@ return static function (FrameworkConfig $framework, ContainerConfigurator $conta
     ;
 
     if ($container->env() === 'test') {
-        $framework
-            ->test(true)
-            ->session()
-            ->storageFactoryId('session.storage.factory.mock_file')
-        ;
+        $framework->test(true);
+        $session->storageFactoryId('session.storage.factory.mock_file');
     }
 };
