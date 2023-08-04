@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  database:
+    image: "postgres:15-alpine"
+    environment:
+      POSTGRES_DATABASE: "app"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ".cache/postgres:/var/lib/postgresql:rw"
