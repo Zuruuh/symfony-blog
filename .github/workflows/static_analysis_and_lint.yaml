@@ -44,7 +44,7 @@ jobs:
 
       - name: 'Run phpstan ✅'
         run: |
-          tools/vendor/bin/phpstan analyse --configuration tools/phpstan.dist.neon --error-format > .artifacts/phpstan.out || exit 0
+          tools/vendor/bin/phpstan analyse --configuration tools/phpstan.dist.neon --error-format github > .artifacts/phpstan.out || exit 0
           tools/vendor/bin/phpstan analyse --configuration tools/phpstan.dist.neon
 
       - name: 'Run psalm ✅'
