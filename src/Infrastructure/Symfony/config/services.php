@@ -15,6 +15,6 @@ return static function (ContainerConfigurator $container): void {
         ->exclude(array_map(static fn (string $entry) => dirname(__DIR__) . "/src/$entry", [
             '/DependencyInjection/',
             '/Entity/',
-            '/Kernel.php'
+            '/Kernel.php',
         ]));
 };

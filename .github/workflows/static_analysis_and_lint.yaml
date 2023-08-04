@@ -54,6 +54,11 @@ jobs:
           tools/vendor/bin/psalm --config tools/psalm.dist.xml --output-format=github > .artifacts/psalm.out || true
           tools/vendor/bin/psalm --config tools/psalm.dist.xml --long-progress
 
+      - name: 'Run php-cs-fixer ✅'
+        if: 'always()'
+        run: |
+          tools/vendor/bin/php-cs-fixer fix --dry-run --allow-risky yes --diff --config tools/.php-cs-fixer.dist.php
+
       - name: 'Run deptrac ✅'
         if: 'always()'
         run: |

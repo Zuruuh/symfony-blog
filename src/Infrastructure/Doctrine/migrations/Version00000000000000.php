@@ -17,11 +17,7 @@ final class Version00000000000000 extends AbstractMigration
         return 'Initial migration';
     }
 
-    public function up(Schema $schema): void
-    {
-    }
+    public function up(Schema $schema): void {}
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

@@ -6,6 +6,7 @@ use Infrastructure\Symfony\Kernel;
 
 require_once dirname(__DIR__, 4) . '/vendor/autoload_runtime.php';
 
-return function (array $context) {
-    return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
-};
+/**
+ * @param array{APP_ENV: string, APP_DEBUG: string} $context
+ */
+return static fn (array $context): Kernel => new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);

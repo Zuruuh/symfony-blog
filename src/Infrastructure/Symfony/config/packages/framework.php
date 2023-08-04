@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Config\FrameworkConfig;
 use Symfony\Config\Framework\SessionConfig;
+use Symfony\Config\FrameworkConfig;
 
 return static function (FrameworkConfig $framework, ContainerConfigurator $container): void {
     $framework->secret('%env(APP_SECRET)%');

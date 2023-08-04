@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Config\DoctrineConfig;
 use Symfony\Config\Doctrine\DbalConfig;
+use Symfony\Config\DoctrineConfig;
 
 return static function (DoctrineConfig $doctrine, ContainerConfigurator $container): void {
     $dbal = $doctrine->dbal();
@@ -23,25 +23,25 @@ return static function (DoctrineConfig $doctrine, ContainerConfigurator $contain
         $doctrine->dbal(['dbname_suffix' => '_test%env(default::TEST_TOKEN)%']);
     }
 
-/**
-when@prod:
-    doctrine:
-        # orm:
-        #     auto_generate_proxy_classes: false
-        #     proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
-        #     query_cache_driver:
-        #         type: pool
-        #         pool: doctrine.system_cache_pool
-        #     result_cache_driver:
-        #         type: pool
-        #         pool: doctrine.result_cache_pool
+    /**
+    when@prod:
+        doctrine:
+            # orm:
+            #     auto_generate_proxy_classes: false
+            #     proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+            #     query_cache_driver:
+            #         type: pool
+            #         pool: doctrine.system_cache_pool
+            #     result_cache_driver:
+            #         type: pool
+            #         pool: doctrine.result_cache_pool
 
-    framework:
-        cache:
-            pools:
-                doctrine.result_cache_pool:
-                    adapter: cache.app
-                doctrine.system_cache_pool:
-                    adapter: cache.system
-*/
+        framework:
+            cache:
+                pools:
+                    doctrine.result_cache_pool:
+                        adapter: cache.app
+                    doctrine.system_cache_pool:
+                        adapter: cache.system
+    */
 };
