@@ -1,10 +1,12 @@
 set shell := ["bash", "-uc"]
 
-phpstan_bin := "vendor/bin/phpstan"
 symfony_bin := "symfony"
 docker_bin := "docker"
 compose_file := "compose.dev.yaml"
 docker_compose_bin := docker_bin + " compose -f " + compose_file
+
+phpstan_bin := "vendor/bin/phpstan"
+deptrac_bin := "vendor/bin/deptrac"
 
 install:
     {{symfony_bin}} composer install
@@ -20,8 +22,13 @@ start: install stop
 log service="server":
     if [[ {{service}} = "server" ]]; then {{symfony_bin}} server:log; else {{docker_compose_bin}} logs {{service}} -fn 30; fi
 
-symfony_cache:
+symfony_cache: install
     {{symfony_bin}} console --env=dev cache:warmup
+
+## Tooling
 
 phpstan: symfony_cache
 	{{phpstan_bin}} analyse --configuration ./phpstan.dist.neon
+
+deptrac: install
+    {{deptrac_bin}} analyse --config-file ./deptrac.yaml

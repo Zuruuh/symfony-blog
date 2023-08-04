@@ -1,0 +1,35 @@
+deptrac:
+  paths:
+    - ./src
+  exclude_files:
+    - '#^Infrastructure/Symfony/var#'
+  layers:
+    - name: Domain
+      collectors:
+        - type: directory
+          value: src/Domain/.*
+
+    - name: Application
+      collectors:
+        - type: directory
+          value: src/Application/.*
+
+    - name: Infrastructure
+      collectors:
+        - type: directory
+          value: src/Infrastructure/.*
+
+    ## External
+    - name: Vendors
+      collectors:
+        - { type: classNameRegex, value: '#^Doctrine\\#' }
+        - { type: classNameRegex, value: '#^Symfony\\(?!(Component\\Uid\\))#' }
+
+    - name: Uid
+      collectors:
+        - { type: classNameRegex, value: '#^Symfony\\Component\\Uid\\#'}
+
+  ruleset:
+    Domain: [Uid]
+    Appliation: [Domain]
+    Infrastructure: [Application, Domain, Vendors]
