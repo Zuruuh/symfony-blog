@@ -39,3 +39,5 @@ deptrac: install
 
 psalm: symfony_cache
     {{psalm_bin}} --config ./tools/psalm.dist.xml
+
+static_analysis: phpstan psalm deptrac

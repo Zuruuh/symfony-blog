@@ -1,0 +1,53 @@
+name: Static analysis and linting
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+
+jobs:
+  setup_dependencies:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: 'Checkout branch 🛎️'
+        uses: actions/checkout@3
+
+      - name: 'Install php 📦'
+        uses: 'shivammathur/setup-php@2.25.5'
+        with:
+          php-version: '8.2'
+          coverage: 'pcov'
+
+      - name: 'Get composer cache directory 🏎️'
+        id: 'composer-cache'
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: 'Cache dependencies 🏎️ '
+        uses: 'actions/cache@v3'
+        with:
+          path: '${{ steps.composer-cache.outputs.dir }}'
+          key: '${{ runner.os }}-composer-${{ hashFiles("/composer.lock") }}'
+          restore-keys: '${{ runner.os }}-composer-'
+
+      - name: 'Install dependencies 📦'
+        run: |
+          composer install --prefer-dist --no-progress
+          composer install --prefer-dist --no-progress --working-dir tools
+
+      - name: 'Generate symfony cache 🎶'
+        run: |
+          bin/console --env=dev cache:warmup
+
+      - name: 'Run phpstan ✅'
+        run: |
+          tools/vendor/bin/phpstan analyse --configuration tools/phpstan.dist.neon
+
+      - name: 'Run psalm ✅'
+        run: |
+          tools/vendor/bin/psalm --config tools/psalm.dist.xml
+
+      - name: 'Run deptrac ✅'
+        run: |
+          tools/vendor/bin/deptrac --config tools/deptrac.yaml
