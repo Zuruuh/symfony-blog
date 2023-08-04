@@ -22,12 +22,17 @@ deptrac:
     ## External
     - name: Vendors
       collectors:
-        - { type: classNameRegex, value: '#^Doctrine\\#' }
+        - { type: classNameRegex, value: '#^Doctrine\\(?!(ORM))#' }
         - { type: classNameRegex, value: '#^Symfony\\(?!(Component\\Uid\\))#' }
+
+    - name: ExcludedVendors
+      collectors:
+        - { type: classNameRegex, value: '#^Doctrine\\ORM#' }
 
     - name: Uid
       collectors:
-        - { type: classNameRegex, value: '#^Symfony\\Component\\Uid\\#'}
+        - type: classNameRegex
+          value: '#^Symfony\\Component\\Uid\\#'
 
   ruleset:
     Domain: [Uid]
