@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
+/**
+ * @api
+ */
 final class Version00000000000000 extends AbstractMigration
 {
     public function getDescription(): string

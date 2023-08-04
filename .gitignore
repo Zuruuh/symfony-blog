@@ -4,13 +4,5 @@
 /.env.local.php
 /.env.*.local
 
-/.cache/*
-!/.cache/.gitkeep
-
+/.cache/
 /phpunit.xml
-
-/phpstan.neon
-
-###> qossmic/deptrac-shim ###
-/.deptrac.cache
-###< qossmic/deptrac-shim ###

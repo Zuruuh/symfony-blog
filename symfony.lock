@@ -26,18 +26,6 @@
             "migrations/.gitignore"
         ]
     },
-    "phpstan/phpstan": {
-        "version": "1.10",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "1.0",
-            "ref": "d74d4d719d5f53856c9c13544aa22d44144b1819"
-        },
-        "files": [
-            "phpstan.neon"
-        ]
-    },
     "phpunit/phpunit": {
         "version": "10.2",
         "recipe": {
@@ -50,18 +38,6 @@
             ".env.test",
             "phpunit.xml.dist",
             "tests/bootstrap.php"
-        ]
-    },
-    "qossmic/deptrac-shim": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "0.19",
-            "ref": "3c3daab46226c37fc14e10faf81df737a3039d96"
-        },
-        "files": [
-            "deptrac.yaml"
         ]
     },
     "symfony/console": {
