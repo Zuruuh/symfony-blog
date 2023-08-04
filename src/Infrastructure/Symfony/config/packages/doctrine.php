@@ -1,9 +1,19 @@
-doctrine:
-    dbal:
-        url: '%env(resolve:APP_DATABASE_URL)%'
-        server_version: '15'
-        charset: 'utf8'
-        profiling_collect_backtrace: '%kernel.debug%'
+<?php
+
+declare(strict_types=1);
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Config\DoctrineConfig;
+use Symfony\Config\Doctrine\DbalConfig;
+
+return static function (DoctrineConfig $doctrine, ContainerConfigurator $container): void {
+    $doctrine
+        ->dbal(
+            (new DbalConfig())
+                ->type('url', '%env(resolve:APP_DATABASE_URL)%')
+                ->type('server_version', '15')
+        )
+    ;
     # orm:
     #     auto_generate_proxy_classes: true
     #     enable_lazy_ghost_objects: true
@@ -12,11 +22,11 @@ doctrine:
     #     naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
     #     auto_mapping: true
 
-when@test:
-    doctrine:
-        dbal:
-            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+    if ($container->env() === 'test') {
+        $doctrine->dbal(['dbname_suffix' => '_test%env(default::TEST_TOKEN)%']);
+    }
 
+/**
 when@prod:
     doctrine:
         # orm:
@@ -36,3 +46,5 @@ when@prod:
                     adapter: cache.app
                 doctrine.system_cache_pool:
                     adapter: cache.system
+*/
+};

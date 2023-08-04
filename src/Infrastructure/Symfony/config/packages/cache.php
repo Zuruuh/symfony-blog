@@ -1,5 +1,11 @@
-framework:
-    cache:
+<?php
+
+use Symfony\Config\FrameworkConfig;
+
+return static function (FrameworkConfig $framework): void {
+    $framework->cache();
+/*
+
         # Unique name of your app: used to compute stable namespaces for cache keys.
         #prefix_seed: your_vendor_name/app_name
 
@@ -17,3 +23,5 @@ framework:
         # Namespaced pools use the above "app" backend by default
         #pools:
             #my.dedicated.cache: null
+*/
+};
