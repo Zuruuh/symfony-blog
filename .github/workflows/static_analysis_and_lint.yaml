@@ -43,21 +43,25 @@ jobs:
           bin/console --env=dev cache:warmup
 
       - name: 'Run phpstan ✅'
+        if: 'always()'
         run: |
           tools/vendor/bin/phpstan analyse --configuration tools/phpstan.dist.neon --error-format github > .artifacts/phpstan.out || exit 0
           tools/vendor/bin/phpstan analyse --configuration tools/phpstan.dist.neon
 
       - name: 'Run psalm ✅'
+        if: 'always()'
         run: |
           tools/vendor/bin/psalm --config tools/psalm.dist.xml --output-format=github > .artifacts/psalm.out || exit 0
           tools/vendor/bin/psalm --config tools/psalm.dist.xml --long-progress
 
       - name: 'Run deptrac ✅'
+        if: 'always()'
         run: |
           tools/vendor/bin/deptrac --config-file tools/deptrac.yaml
 
       - name: 'Upload artifacts 🚚'
         uses: 'actions/upload-artifact@v3'
+        if: "${{ github.event_name == 'pull_request' && failure() }}"
         with:
           name: static-analysis-report
           path: ./.artifacts/*
