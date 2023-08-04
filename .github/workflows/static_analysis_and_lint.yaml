@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: 'Checkout branch 🛎️'
-        uses: actions/checkout@3
+        uses: actions/checkout@v3
 
       - name: 'Install php 📦'
         uses: 'shivammathur/setup-php@2.25.5'
@@ -28,7 +28,7 @@ jobs:
         uses: 'actions/cache@v3'
         with:
           path: '${{ steps.composer-cache.outputs.dir }}'
-          key: '${{ runner.os }}-composer-${{ hashFiles("/composer.lock") }}'
+          key: "${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}"
           restore-keys: '${{ runner.os }}-composer-'
 
       - name: 'Install dependencies 📦'
