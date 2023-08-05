@@ -9,11 +9,11 @@ use Symfony\Component\Uid\Uuid;
 
 trait AggregateRootId
 {
-    private readonly AbstractUid $value;
+    public readonly AbstractUid $value;
 
     final public function __construct(?AbstractUid $value = null)
     {
-        $this->value = $value ?? Uuid::v4();
+        $this->value = $value ?? Uuid::v7();
     }
 
     public function __toString(): string

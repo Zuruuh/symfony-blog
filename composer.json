@@ -15,6 +15,7 @@
         "nelmio/cors-bundle": "^2.3",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.23",
+        "symfony/amqp-messenger": "6.3.*",
         "symfony/asset": "6.3.*",
         "symfony/clock": "6.3.*",
         "symfony/console": "6.3.*",
@@ -54,7 +55,9 @@
             "Application\\": "src/Application/",
             "Domain\\": "src/Domain/",
             "Infrastructure\\Symfony\\": "src/Infrastructure/Symfony/src",
-            "Infrastructure\\Doctrine\\": "src/Infrastructure/Doctrine/src"
+            "Infrastructure\\Doctrine\\": "src/Infrastructure/Doctrine/src",
+            "Infrastructure\\Twig\\": "src/Infrastructure/Twig/src",
+            "Infrastructure\\ApiPlatform\\": "src/Infrastructure/ApiPlatform/src"
         }
     },
     "autoload-dev": {

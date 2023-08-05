@@ -1,8 +1,6 @@
 deptrac:
   paths:
     - ../src
-  exclude_files:
-    - '#^Infrastructure/Symfony/var#'
   layers:
     - name: Domain
       collectors:
@@ -24,6 +22,7 @@ deptrac:
       collectors:
         - { type: classNameRegex, value: '#^Doctrine\\(?!(ORM))#' }
         - { type: classNameRegex, value: '#^Symfony\\(?!(Component\\Uid\\))#' }
+        - { type: classNameRegex, value: '#^ApiPlatform\\#' }
 
     - name: ExcludedVendors
       collectors:

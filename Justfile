@@ -24,15 +24,17 @@ install: cache
 
 stop:
     {{docker_compose_bin}} down
-    {{symfony_bin}} server:stop
+    {{symfony_bin}} server:stop --dir src/Infrastructure/Symfony
 
 start: install stop
     {{docker_compose_bin}} up -d --wait
     {{symfony_bin}} server:start --no-tls -d --dir src/Infrastructure/Symfony
+    just db
 
-db: start
-    {{symfony_bin}} console d:d:d --force --if-exists
-    {{symfony_bin}} console d:d:c --no-interaction
+db:
+    # {{symfony_bin}} console d:d:d --force --if-exists
+    sleep 2s
+    {{symfony_bin}} console d:d:c --no-interaction --if-not-exists
     {{symfony_bin}} console d:m:m latest --no-interaction
 
 log service="server":
