@@ -11,11 +11,19 @@
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "phpstan/phpdoc-parser": "^1.23",
+        "symfony/clock": "6.3.*",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.3.*",
+        "symfony/messenger": "6.3.*",
+        "symfony/monolog-bundle": "^3.8",
+        "symfony/property-access": "6.3.*",
+        "symfony/property-info": "6.3.*",
         "symfony/runtime": "6.3.*",
+        "symfony/serializer": "6.3.*",
         "symfony/uid": "6.3.*",
         "symfony/yaml": "6.3.*",
         "webmozart/assert": "^1.11"
@@ -35,7 +43,8 @@
         "psr-4": {
             "Application\\": "src/Application/",
             "Domain\\": "src/Domain/",
-            "Infrastructure\\Symfony\\": "src/Infrastructure/Symfony/src"
+            "Infrastructure\\Symfony\\": "src/Infrastructure/Symfony/src",
+            "Infrastructure\\Doctrine\\": "src/Infrastructure/Doctrine/src"
         }
     },
     "autoload-dev": {

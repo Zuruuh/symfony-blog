@@ -7,3 +7,4 @@
 /.cache/
 
 /phpunit.xml
+/.coverage/

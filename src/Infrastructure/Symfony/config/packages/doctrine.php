@@ -3,14 +3,19 @@
 declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Config\Doctrine\DbalConfig;
 use Symfony\Config\DoctrineConfig;
 
 return static function (DoctrineConfig $doctrine, ContainerConfigurator $container): void {
-    $dbal = $doctrine->dbal();
+    $dbal = $doctrine->dbal([
+        'connections' => ['default' => [
+            'url' => '%env(resolve:APP_DATABASE_URL)%',
+            'server_version' => '15',
+            'charset' => 'utf8',
+            'driver' => 'postgrseql',
+            'dbname_suffix' => $container->env() === 'test' ? '_test%env(default::TEST_TOKEN)%' : '',
+        ]],
+    ]);
 
-    $dbal->type('url', '%env(resolve:APP_DATABASE_URL)%');
-    $dbal->type('server_version', '15');
     # orm:
     #     auto_generate_proxy_classes: true
     #     enable_lazy_ghost_objects: true
@@ -18,10 +23,6 @@ return static function (DoctrineConfig $doctrine, ContainerConfigurator $contain
     #     validate_xml_mapping: true
     #     naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
     #     auto_mapping: true
-
-    if ($container->env() === 'test') {
-        $doctrine->dbal(['dbname_suffix' => '_test%env(default::TEST_TOKEN)%']);
-    }
 
     /**
     when@prod:

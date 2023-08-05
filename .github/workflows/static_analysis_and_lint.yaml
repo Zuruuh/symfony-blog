@@ -62,7 +62,7 @@ jobs:
       - name: 'Run deptrac ✅'
         if: 'always()'
         run: |
-          tools/vendor/bin/deptrac --config-file tools/deptrac.yaml
+          tools/vendor/bin/deptrac --config-file tools/deptrac.yaml --report-uncovered --fail-on-uncovered
 
       - name: 'Upload artifacts 🚚'
         uses: 'actions/upload-artifact@v3'

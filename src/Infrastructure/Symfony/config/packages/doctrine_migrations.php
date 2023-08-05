@@ -7,7 +7,7 @@ use Symfony\Config\DoctrineMigrationsConfig;
 
 return static function (DoctrineMigrationsConfig $doctrineMigrations, ContainerConfigurator $container): void {
     $doctrineMigrations
-        ->migrationsPath('DoctrineMigrations', '%kernel.project_dir%/src/Infrastructure/Doctrine/migrations')
+        ->migrationsPath('DoctrineMigrations', dirname(__DIR__, 4) . '/Infrastructure/Doctrine/migrations')
         ->enableProfiler($container->env() === 'dev')
     ;
 };

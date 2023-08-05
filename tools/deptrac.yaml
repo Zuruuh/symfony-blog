@@ -23,8 +23,7 @@ deptrac:
     - name: Vendors
       collectors:
         - { type: classNameRegex, value: '#^Doctrine\\(?!(ORM))#' }
-        - { type: classNameRegex, value: '#^Symfony\\#' }
-        - { type: classNameRegex, value: '#^Webmozart\\Assert\\#' }
+        - { type: classNameRegex, value: '#^Symfony\\(?!(Component\\Uid\\))#' }
 
     - name: ExcludedVendors
       collectors:
@@ -42,5 +41,5 @@ deptrac:
 
   ruleset:
     Domain: [Assert, Uid]
-    Appliation: [Assert, Domain, Uid]
-    Infrastructure: [Application, Domain, Vendors]
+    Application: [Assert, Domain, Uid]
+    Infrastructure: [Application, Domain, Uid, Vendors]

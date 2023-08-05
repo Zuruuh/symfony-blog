@@ -17,7 +17,21 @@ final class Version00000000000000 extends AbstractMigration
         return 'Initial migration';
     }
 
-    public function up(Schema $schema): void {}
+    public function up(Schema $schema): void
+    {
+        $this->addSql(
+            <<<SQL
+                CREATE TABLE posts (
+                    id UUID UNIQUE PRIMARY KEY,
+                    title VARCHAR(255),
+                    slug TEXT,
+                    content TEXT
+                )
+                SQL
+        );
+    }
 
-    public function down(Schema $schema): void {}
+    public function down(Schema $schema): void {
+        $this->addSql('DROP TABLE posts');
+    }
 }

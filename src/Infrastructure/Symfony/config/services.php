@@ -17,4 +17,9 @@ return static function (ContainerConfigurator $container): void {
             '/Entity/',
             '/Kernel.php',
         ]));
+
+    $services->load('Infrastructure\\Doctrine\\', dirname(__DIR__, 2) . '/Doctrine/src/');
+
+    $services->load('Application\\', dirname(__DIR__, 3) . '/Application/');
+    $services->load('Domain\\', dirname(__DIR__, 3) . '/Domain/');
 };
