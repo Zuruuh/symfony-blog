@@ -66,6 +66,9 @@ final readonly class DoctrinePaginator implements PaginatorInterface
 
     public function getIterator(): \Traversable
     {
+        /**
+         * @var \Traversable<positive-int, T>
+         */
         return $this->queryBuilder->executeQuery()->iterateColumn();
     }
 }

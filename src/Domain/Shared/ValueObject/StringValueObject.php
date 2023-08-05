@@ -6,9 +6,6 @@ namespace Domain\Shared\ValueObject;
 
 use Stringable;
 
-/**
- * @implements ValueObject<static>
- */
 abstract readonly class StringValueObject implements ValueObject, Stringable
 {
     public function __construct(private string $value)

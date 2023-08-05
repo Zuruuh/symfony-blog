@@ -31,7 +31,8 @@ final class Version00000000000000 extends AbstractMigration
         );
     }
 
-    public function down(Schema $schema): void {
+    public function down(Schema $schema): void
+    {
         $this->addSql('DROP TABLE posts');
     }
 }

@@ -14,6 +14,6 @@ final readonly class SymfonySlugger implements SluggerInterface
 
     public function slug(string $string): Slug
     {
-        return new Slug($this->slugger->slug($string));
+        return new Slug($this->slugger->slug($string)->toString());
     }
 }

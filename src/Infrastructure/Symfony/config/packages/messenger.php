@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 use Application\Shared\Command\CommandInterface;
 use Application\Shared\Query\QueryInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Config\FrameworkConfig;
-use Symfony\Config\Framework\MessengerConfig;
 use Symfony\Config\Framework\Messenger\RoutingConfig;
 use Symfony\Config\Framework\Messenger\TransportConfig;
+use Symfony\Config\FrameworkConfig;
 
 return static function (FrameworkConfig $framework, ContainerConfigurator $container): void {
     $messenger = $framework->messenger();
-    assert($messenger instanceof MessengerConfig);
 
     $messenger->defaultBus('queue.bus');
     $messenger->bus('queue.bus');

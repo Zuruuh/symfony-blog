@@ -15,7 +15,7 @@ use Infrastructure\Doctrine\Shared\Repository\DoctrineRepository;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
- * @extends AbstractDoctrineRepository<Post>
+ * @extends DoctrineRepository<Post>
  */
 final class DoctrinePostRepository extends DoctrineRepository implements PostRepository, PostPersister
 {

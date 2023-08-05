@@ -11,3 +11,6 @@ parameters:
       containerXmlPath: ../.cache/symfony/dev/Infrastructure_Symfony_KernelDevDebugContainer.xml
   scanDirectories:
     - ../.cache/symfony/dev/Symfony/Config
+  ignoreErrors:
+    -
+        message: '#^Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.$#'

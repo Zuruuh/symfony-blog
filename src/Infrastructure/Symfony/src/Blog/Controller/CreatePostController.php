@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Infrastructure\Symfony\Blog\Controller;
 
 use Symfony\Component\HttpFoundation\Request;

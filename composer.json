@@ -7,15 +7,19 @@
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "api-platform/core": "^3.1",
         "doctrine/dbal": "^3.6",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
+        "nelmio/cors-bundle": "^2.3",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.23",
+        "symfony/asset": "6.3.*",
         "symfony/clock": "6.3.*",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
+        "symfony/expression-language": "6.3.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.3.*",
         "symfony/messenger": "6.3.*",
@@ -23,13 +27,19 @@
         "symfony/property-access": "6.3.*",
         "symfony/property-info": "6.3.*",
         "symfony/runtime": "6.3.*",
+        "symfony/security-bundle": "6.3.*",
         "symfony/serializer": "6.3.*",
+        "symfony/twig-bundle": "6.3.*",
         "symfony/uid": "6.3.*",
+        "symfony/validator": "6.3.*",
         "symfony/yaml": "6.3.*",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.2"
+        "phpunit/phpunit": "^10.2",
+        "symfony/debug-bundle": "6.3.*",
+        "symfony/stopwatch": "6.3.*",
+        "symfony/web-profiler-bundle": "6.3.*"
     },
     "config": {
         "allow-plugins": {

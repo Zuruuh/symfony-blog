@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Infrastructure\Symfony\Shared\Messenger;
 
 use Application\Shared\Query\QueryBusInterface;
@@ -23,11 +25,11 @@ final class MessengerQueryBus implements QueryBusInterface
             return $this->handle($query);
         } catch (HandlerFailedException $e) {
             /**
-             * @var non-empty-list<\Throwable> $exceptions
+             * @var array{\Throwable} $exceptions
              */
             $exceptions = $e->getNestedExceptions();
 
-            throw next($exceptions);
+            throw $exceptions[0];
         }
     }
 }
